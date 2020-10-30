@@ -5,12 +5,11 @@
 #SBATCH -A strauss
 #SBATCH -J q2_scikit_tax
 #SBATCH -N 1
-#SBATCH --time=300:00:00
-#SBATCH --mem=90g				#TOTAL RAM PER TASK		
-#SBATCH -n 32					#NUMBER OF CPUS PER TASK
-#SBATCH -D /ufrc/strauss/antonio.castella/citrus/CRDF/time0/16S 	#PATH OF YOUR WORKING FOLDER
-#SBATCH -o logs/q2_scikit_tax_taxa_%j.out	#PATH OF LOG FILE
-
+#SBATCH --time=72:00:00
+#SBATCH --mem=30g                                                         #TOTAL RAM PER TASK       
+#SBATCH -n 8                                                                #NUMBER OF CPUS PER TASK
+#SBATCH -D /blue/strauss/bmonus/TomatoFumigation/TomatoFumigation16S  #PATH OF YOUR WORKING FOLDER
+#SBATCH -o logs/4_q2_tax_SILVA128_%j.out                            #PATH OF LOG FILE
 
 date;hostname;pwd
 
@@ -21,32 +20,33 @@ date;hostname;pwd
 ################################################################################
 
 # ----------------Load Modules--------------------
-module load qiime2/2018.8
+module load qiime2
 
 # ----------------Housekeeping--------------------
 cd features
+rm taxonomy.qza
+rm taxa-bar-plots.tsv
+rm taxonomy.qzv
 
 # ----------------Commands------------------------
-
-
-#qiime feature-classifier classify-sklearn \
-#  --p-n-jobs -1 \
-#  --i-reads rep-seqs.qza \
-#  --o-classification taxonomy.qza \
-#  --i-classifier  /ufrc/strauss/nevinsc/BSCjan19/16S2/SILVA_nb_99_V3-V4b.qza
-
+qiime feature-classifier classify-sklearn \
+  --i-reads rep-seqs.qza \
+  --o-classification taxonomy.qza \
+  --i-classifier  SILVA_nb_99_V3-V4b.qza 
 
 qiime metadata tabulate \
   --m-input-file taxonomy.qza \
   --o-visualization taxonomy.qzv
 
-#qiime taxa barplot \
-#  --i-table table.qza \
-#  --i-taxonomy taxonomy.qza \
-#  --m-metadata-file /ufrc/strauss/antonio.castella/citrus/CRDF/time0/16S/features/Metadata.txt \
-#  --o-visualization taxa-bar-plots.qzv
+qiime taxa barplot \
+  --i-table table.qza \
+  --i-taxonomy taxonomy.qza \
+  --o-visualization taxa-bar-plots.qzv \
+  --m-metadata-file ../features/MetadataTomatoFumigation.txt
 
-#Unload modules:
-module unload qiime2/2018.8
+
+# Unload modules:
+module unload qiime2
 
 date
+
