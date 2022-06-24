@@ -17,7 +17,7 @@ To login on Hipergator follow the procedures reported at https://help.rc.ufl.edu
 
 After logging in, navigate to your working directory and create the necessary subfolders:
 ```{bash, eval=FALSE}
-cd /ufrc/strauss/your_account/your_working_directory 
+cd /blue/strauss/your_account/your_working_directory 
 mkdir 16S
 
 mkdir ITS
@@ -64,7 +64,7 @@ You will be prompted with a text editor where you should copy-paste the followin
 #SBATCH -A strauss
 #SBATCH -J setup
 #SBATCH -N 1
-#SBATCH -D /ufrc/strauss/your_account/your_working_directory/16S  #PATH OF YOUR WORKING FOLDER
+#SBATCH -D /blue/strauss/your_account/your_working_directory/16S  #PATH OF YOUR WORKING FOLDER
 #SBATCH -o logs/0_setup_%j.out		                                #PATH OF LOG FILE
 
 date;hostname;pwd
@@ -136,7 +136,7 @@ And copypaste the following
 #SBATCH --time=2:00:00                                            #Maximum number of hours
 #SBATCH -N 1                                                      #Number of nodes
 #SBATCH --mem=10g                                                 #Allocated RAM
-#SBATCH -D /ufrc/strauss/your_account/your_working_directory/16S  #PATH OF YOUR WORKING FOLDER
+#SBATCH -D /blue/strauss/your_account/your_working_directory/16S  #PATH OF YOUR WORKING FOLDER
 #SBATCH -o logs/1_q2_import_%j.out	                              #PATH OF LOG FILE
 
 date;hostname;pwd
@@ -219,7 +219,7 @@ nano scripts/2_dada2.sh
 #SBATCH --time=24:00:00
 #SBATCH --mem=40g			                                        	  #TOTAL RAM PER TASK
 #SBATCH -n 12					                                            #NUMBER OF CPUS PER TASK
-#SBATCH -D /ufrc/strauss/your_account/your_working_directory/16S  #PATH OF YOUR WORKING FOLDER
+#SBATCH -D /blue/strauss/your_account/your_working_directory/16S  #PATH OF YOUR WORKING FOLDER
 #SBATCH -o logs/2_q2_dada2_%j.out	                                #PATH OF LOG FILE
 
 date;hostname;pwd
@@ -282,7 +282,7 @@ nano scripts/3_feature_table.sh
 #SBATCH -N 1
 #SBATCH --time=2:00:00			
 #SBATCH --mem=10g			                                            #TOTAL RAM PER TASK
-#SBATCH -D /ufrc/strauss/your_account/your_working_directory/16S  #PATH OF YOUR WORKING FOLDER
+#SBATCH -D /blue/strauss/your_account/your_working_directory/16S  #PATH OF YOUR WORKING FOLDER
 #SBATCH -o logs/3_q2_feature_table_%j.out	                        #PATH OF LOG FILE
 
 date;hostname;pwd
@@ -343,7 +343,7 @@ nano scripts/4_taxonomy_SILVA.sh
 #SBATCH --time=72:00:00
 #SBATCH --mem=30g				                                          #TOTAL RAM PER TASK		
 #SBATCH -n 8					                                            #NUMBER OF CPUS PER TASK
-#SBATCH -D /ufrc/strauss/your_account/your_working_directory/16S  #PATH OF YOUR WORKING FOLDER
+#SBATCH -D /blue/strauss/your_account/your_working_directory/16S  #PATH OF YOUR WORKING FOLDER
 #SBATCH -o logs/4_q2_tax_SILVA128_%j.out	                        #PATH OF LOG FILE
 
 date;hostname;pwd
@@ -367,7 +367,7 @@ rm taxonomy.qzv
 qiime feature-classifier classify-sklearn \
   --i-reads rep-seqs.qza \
   --o-classification taxonomy.qza \
-  --i-classifier  /ufrc/strauss/blabla          #INSERT PATH TO YOUR PRETRAINED DATABASE 
+  --i-classifier  /blue/strauss/blabla          #INSERT PATH TO YOUR PRETRAINED DATABASE 
 
 qiime metadata tabulate \
   --m-input-file taxonomy.qza \
@@ -413,7 +413,7 @@ nano scripts/opt_train_sklearn.sh
 #SBATCH -N 1
 #SBATCH --time=24:00:00
 #SBATCH --mem=40g			                          #TOTAL RAM PER TASK
-#SBATCH -D /ufrc/strauss/ 		                  #PATH TO A DATABASE FOLDER OF YOUR CHOICE
+#SBATCH -D /blue/strauss/ 		                  #PATH TO A DATABASE FOLDER OF YOUR CHOICE
 #SBATCH -o logs/q2_scikit_train_%j.out	        #PATH OF LOG FILE
 
 date;hostname;pwd
@@ -431,14 +431,14 @@ module load qiime2
 qiime tools import \
   --type 'FeatureData[Sequence]' \
   --output-path imported-fasta-database.qza \
-  --input-path /ufrc/strauss/blabla   #INSERT PATH TO THE rep_set/rep_set_all/97/97_otus.fasta FILE
+  --input-path /blue/strauss/blabla   #INSERT PATH TO THE rep_set/rep_set_all/97/97_otus.fasta FILE
 
 
 qiime tools import \
   --type 'FeatureData[Taxonomy]' \
   --source-format HeaderlessTSVTaxonomyFormat \
   --output-path imported-taxonomy.qza \
-  --input-path /ufrc/strauss/blabla #INSERT PATH TO THE taxonomy_all/97/consensus_taxonomy_7_levels.txt FILE
+  --input-path /blue/strauss/blabla #INSERT PATH TO THE taxonomy_all/97/consensus_taxonomy_7_levels.txt FILE
 
 qiime feature-classifier extract-reads \
   --i-sequences imported-fasta-database.qza  \
@@ -450,7 +450,7 @@ qiime feature-classifier extract-reads \
 qiime feature-classifier fit-classifier-naive-bayes \
   --i-reference-reads truncated-imported-db.qza \
   --i-reference-taxonomy imported-taxonomy.qza \
-  --o-classifier 	/ufrc/strauss/blabla                      #INSERT NAME OF YOUR FINAL CLASSIFIER
+  --o-classifier 	/blue/strauss/blabla                      #INSERT NAME OF YOUR FINAL CLASSIFIER
 
 module unload qiime2
 
@@ -482,7 +482,7 @@ nano scripts/5_PICRUST.sh
 #SBATCH --time=72:00:00
 #SBATCH --mem=25g				                                          #TOTAL RAM PER TASK		
 #SBATCH -n 8					                                            #NUMBER OF CPUS PER TASK
-#SBATCH -D /ufrc/strauss/your_account/your_working_directory/16S  #PATH OF YOUR WORKING FOLDER
+#SBATCH -D /blue/strauss/your_account/your_working_directory/16S  #PATH OF YOUR WORKING FOLDER
 #SBATCH -o logs/5_PICRUSt_%j.out	                                #PATH OF LOG FILE
 
 date;hostname;pwd
@@ -520,8 +520,8 @@ pick_closed_reference_otus.py \
  -o gg \
  -a -O 8 \
  -p otu_picking_params_97.txt \
- -r /ufrc/strauss/blabla \        #INSERT PATH TO THE gg_13_8_otus/rep_set/97_otus.fasta FILE AND DELETE THIS INSTRUCTION
- -t /ufrc/strauss/blabla          #INSERT PATH TO THE gg_13_8_otus/taxonomy/97_otu_taxonomy.txt FILE
+ -r /blue/strauss/blabla \        #INSERT PATH TO THE gg_13_8_otus/rep_set/97_otus.fasta FILE AND DELETE THIS INSTRUCTION
+ -t /blue/strauss/blabla          #INSERT PATH TO THE gg_13_8_otus/taxonomy/97_otu_taxonomy.txt FILE
 
 filter_taxa_from_otu_table.py \
   -i gg/*.biom \
@@ -534,7 +534,7 @@ filter_otus_from_otu_table.py \
  -i picrust_input.biom \
  -o closed_otu_table.biom \
  --negate_ids_to_exclude \
- -e /ufrc/strauss/blabla        #INSERT PATH TO THE gg_13_8_otus/rep_set/97_otus.fasta FILE
+ -e /blue/strauss/blabla        #INSERT PATH TO THE gg_13_8_otus/rep_set/97_otus.fasta FILE
 
 filter_samples_from_otu_table.py \
  -i picrust_input.biom \
@@ -610,7 +610,7 @@ nano scripts/0_setup.sh
 #SBATCH --account=strauss
 #SBATCH --job-name=setup
 #SBATCH --ntasks=1
-#SBATCH -D /ufrc/strauss/your_account/your_working_directory/ITS  #PATH OF YOUR WORKING FOLDER
+#SBATCH -D /blue/strauss/your_account/your_working_directory/ITS  #PATH OF YOUR WORKING FOLDER
 #SBATCH -o logs/0_setup_%j.out
 date;hostname;pwd
 
@@ -682,7 +682,7 @@ nano scripts/1_merge_and_trim.sh
 #SBATCH --ntasks=1
 #SBATCH -n 8
 #SBATCH --mem=20g
-#SBATCH -D /ufrc/strauss/your_account/your_working_directory/ITS  #PATH OF YOUR WORKING FOLDER
+#SBATCH -D /blue/strauss/your_account/your_working_directory/ITS  #PATH OF YOUR WORKING FOLDER
 #SBATCH -o logs/1_pear_cutadapt_%j.out
 date;hostname;pwd
 
@@ -777,7 +777,7 @@ nano scripts/2_import.sh
 #SBATCH --ntasks=1
 #SBATCH -n 8
 #SBATCH --mem=20g
-#SBATCH -D /ufrc/strauss/your_account/your_working_directory/ITS  #PATH OF YOUR WORKING FOLDER
+#SBATCH -D /blue/strauss/your_account/your_working_directory/ITS  #PATH OF YOUR WORKING FOLDER
 #SBATCH -o logs/2_import_q2_%j.out
 #SBATCH -A strauss
 date;hostname;pwd
@@ -840,7 +840,7 @@ nano scripts/3_dada2_single.sh
 #SBATCH -J denoise_single
 #SBATCH -n 14                                                     #NUMBER OF CPUS PER TASK
 #SBATCH --mem=40g                                                 #MEMORY PER TASK
-#SBATCH -D /ufrc/strauss/your_account/your_working_directory/ITS  #PATH OF YOUR WORKING FOLDER
+#SBATCH -D /blue/strauss/your_account/your_working_directory/ITS  #PATH OF YOUR WORKING FOLDER
 #SBATCH -o logs/3_denoise_singles_q2_%j.out
 #SBATCH -A strauss
 
@@ -907,7 +907,7 @@ nano scripts/4_Taxonomy_UNITE.sh
 #SBATCH -n 12
 #SBATCH -J taxonomy_UNITE
 #SBATCH -o logs/4_taxonomy_UNITE_%j.out
-#SBATCH -D /ufrc/strauss/your_account/your_working_directory/ITS  #PATH OF YOUR WORKING FOLDER
+#SBATCH -D /blue/strauss/your_account/your_working_directory/ITS  #PATH OF YOUR WORKING FOLDER
 #SBATCH -A strauss
 
 date;hostname;pwd
@@ -932,7 +932,7 @@ rm taxonomy.qzv
 qiime feature-classifier classify-sklearn \
   --i-reads rep-seqs.qza \
   --o-classification taxonomy.qza \
-  --i-classifier  /ufrc/strauss/blabla          #INSERT PATH TO YOUR PRETRAINED DATABASE 
+  --i-classifier  /blue/strauss/blabla          #INSERT PATH TO YOUR PRETRAINED DATABASE 
 
 qiime metadata tabulate \
   --m-input-file taxonomy.qza \
@@ -968,7 +968,7 @@ nano scripts/opt_train_sklearn_UNITE.sh
 #SBATCH --time=24:00:00
 #SBATCH -N 1
 #SBATCH -J scikit_training
-#SBATCH -D /ufrc/strauss/ 		                  #PATH TO A DATABASE FOLDER OF YOUR CHOICE
+#SBATCH -D /blue/strauss/ 		                  #PATH TO A DATABASE FOLDER OF YOUR CHOICE
 #SBATCH -o logs/q2_scikit_train_%j.out
 #SBATCH -A strauss
 date;hostname;pwd
@@ -987,13 +987,13 @@ module load qiime2/2017.11
 qiime tools import \
   --type FeatureData[Sequence] \
   --output-path UNITE_99_2017.12_seqs.qza \
-  --input-path  /ufrc/strauss/blabla  #INSERT PATH TO sh_refs_qiime_ver7_99_s_01.12.2017.fasta 
+  --input-path  /blue/strauss/blabla  #INSERT PATH TO sh_refs_qiime_ver7_99_s_01.12.2017.fasta 
 
 qiime tools import \
   --type FeatureData[Taxonomy] \
   --source-format HeaderlessTSVTaxonomyFormat \
   --output-path UNITE_99_2017.12_tax.qza \
-  --input-path  /ufrc/strauss/blabla  #INSERT PATH TO sh_taxonomy_qiime_ver7_99_s_01.12.2017.txt 
+  --input-path  /blue/strauss/blabla  #INSERT PATH TO sh_taxonomy_qiime_ver7_99_s_01.12.2017.txt 
 
 
 qiime feature-classifier fit-classifier-naive-bayes \
@@ -1029,7 +1029,7 @@ nano scripts/5_FUNGUILD.sh
 #SBATCH --time=72:00:00
 #SBATCH --mem=25g				                                          #TOTAL RAM PER TASK		
 #SBATCH -n 8					                                            #NUMBER OF CPUS PER TASK
-#SBATCH -D /ufrc/strauss/your_account/your_working_directory/ITS  #PATH OF YOUR WORKING FOLDER
+#SBATCH -D /blue/strauss/your_account/your_working_directory/ITS  #PATH OF YOUR WORKING FOLDER
 #SBATCH -o logs/5_Funguild_%j.out	                                #PATH OF LOG FILE
 
 date;hostname;pwd
@@ -1122,7 +1122,7 @@ nano scripts/1_merge_kingdoms.sh
 #SBATCH -J merge_kingdoms
 #SBATCH --time=1:00:00
 #SBATCH --ntasks=1
-#SBATCH -D /ufrc/strauss/your_account/your_working_directory/merged  #PATH OF YOUR WORKING FOLDER
+#SBATCH -D /blue/strauss/your_account/your_working_directory/merged  #PATH OF YOUR WORKING FOLDER
 #SBATCH -o logs/1_merge_kingdoms_%j.out
 #SBATCH -A strauss
 
@@ -1200,7 +1200,7 @@ nano scripts/2_to_biom_and_beyond.sh
 #SBATCH -N 1
 #SBATCH -J q2_to_biom
 #SBATCH -o logs/2_q2_to_biom_%j.out
-#SBATCH -D /ufrc/strauss/your_account/your_working_directory/merged  #PATH OF YOUR WORKING FOLDER
+#SBATCH -D /blue/strauss/your_account/your_working_directory/merged  #PATH OF YOUR WORKING FOLDER
 #SBATCH -A strauss
 
 date;hostname;pwd
@@ -1318,7 +1318,7 @@ nano scripts/3_build_tree.sh
 #SBATCH --time=8:00:00
 #SBATCH --ntasks=1
 #SBATCH -n 12
-#SBATCH -D /ufrc/strauss/your_account/your_working_directory/merged  #PATH OF YOUR WORKING FOLDER
+#SBATCH -D /blue/strauss/your_account/your_working_directory/merged  #PATH OF YOUR WORKING FOLDER
 #SBATCH -o logs/3_q2_tree_%j.out
 #SBATCH -A strauss
 
